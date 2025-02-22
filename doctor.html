@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Generate Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+    <div class="container text-center">
+        <h1 class="mb-4 text-primary">Select Information to Collect</h1>
+        <form id="optionsForm" class="bg-white p-4 rounded shadow-sm">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="name" name="options" value="name">
+                <label class="form-check-label" for="name">Name</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="age" name="options" value="age">
+                <label class="form-check-label" for="age">Age</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="addresses" name="options" value="addresses">
+                <label class="form-check-label" for="addresses">Addresses</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="doctorName" name="options" value="doctorName">
+                <label class="form-check-label" for="doctorName">Doctor Name</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="insurance" name="options" value="insurance">
+                <label class="form-check-label" for="insurance">Insurance Option</label>
+            </div>
+            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#formModal" id="generateFormBtn">Generate Form</button>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formModalLabel">Generated Form</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="generatedFormContainer">
+                    <!-- Generated form will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("generateFormBtn").addEventListener("click", () => {
+            let selectedOptions = [];
+            document.querySelectorAll('input[name="options"]:checked').forEach((checkbox) => {
+                selectedOptions.push(checkbox.value);
+            });
+            
+            // Generate form HTML based on selected options
+            let formHTML = '<form class="needs-validation" novalidate>';
+            
+            selectedOptions.forEach(option => {
+                switch(option) {
+                    case 'name':
+                        formHTML += `
+                            <div class="mb-3">
+                                <label for="nameInput" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="nameInput" required>
+                                <div class="invalid-feedback">Please enter your name.</div>
+                            </div>`;
+                        break;
+                    case 'age':
+                        formHTML += `
+                            <div class="mb-3">
+                                <label for="ageInput" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="ageInput" min="0" max="120" required>
+                                <div class="invalid-feedback">Please enter a valid age.</div>
+                            </div>`;
+                        break;
+                    case 'addresses':
+                        formHTML += `
+                            <div class="mb-3">
+                                <label for="addressInput" class="form-label">Address</label>
+                                <textarea class="form-control" id="addressInput" rows="3" required></textarea>
+                                <div class="invalid-feedback">Please enter your address.</div>
+                            </div>`;
+                        break;
+                    case 'doctorName':
+                        formHTML += `
+                            <div class="mb-3">
+                                <label for="doctorInput" class="form-label">Doctor's Name</label>
+                                <input type="text" class="form-control" id="doctorInput" required>
+                                <div class="invalid-feedback">Please enter doctor's name.</div>
+                            </div>`;
+                        break;
+                    case 'insurance':
+                        formHTML += `
+                            <div class="mb-3">
+                                <label for="insuranceSelect" class="form-label">Insurance Type</label>
+                                <select class="form-select" id="insuranceSelect" required>
+                                    <option value="">Choose...</option>
+                                    <option value="private">Private Insurance</option>
+                                    <option value="medicare">Medicare</option>
+                                    <option value="medicaid">Medicaid</option>
+                                </select>
+                                <div class="invalid-feedback">Please select an insurance option.</div>
+                            </div>`;
+                        break;
+                }
+            });
+            
+            formHTML += `
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <script>
+                    // Form validation script
+                    (function () {
+                        'use strict'
+                        var forms = document.querySelectorAll('.needs-validation')
+                        Array.prototype.slice.call(forms).forEach(function (form) {
+                            form.addEventListener('submit', function (event) {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                    })()
+                <\/script>`;
+            
+            document.getElementById("generatedFormContainer").innerHTML = formHTML;
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
